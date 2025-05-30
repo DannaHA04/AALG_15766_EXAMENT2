@@ -1,0 +1,56 @@
+import random
+
+# Función para generar las coordenadas
+def CreacionCoordenadas(cantidad):
+    matriz = []
+    for i in range(cantidad):
+        x = random.randint(-81, 81)
+        y = random.randint(-81, 81)
+        matriz.append([x, y])
+    return matriz
+
+# Calcula distancia al cuadrado desde (0,0)
+def CalcularDistancia(x, y):
+    return x * x + y * y
+
+# Función de divide y vencerás
+def CoordenadaMasLejana(lista):
+    if len(lista) == 1:
+        x = lista[0][0]
+        y = lista[0][1]
+        if x > 0 and y < 0:
+            return lista[0]
+        else:
+            return [0, 0] 
+    else:
+        mitad = len(lista) // 2
+        izquierda = CoordenadaMasLejana(lista[:mitad])
+        derecha = CoordenadaMasLejana(lista[mitad:])
+
+        dist_izq = CalcularDistancia(izquierda[0], izquierda[1])
+        dist_der = CalcularDistancia(derecha[0], derecha[1])
+
+        if dist_izq > dist_der:
+            return izquierda
+        else:
+            return derecha
+
+
+def main():
+    cantidad = int(input("¿Cuántos pares de coordenadas quieres generar? "))
+    coordenadas = CreacionCoordenadas(cantidad)
+
+    print("\nCoordenadas generadas:")
+    for par in coordenadas:
+        print(par)
+
+    resultado = CoordenadaMasLejana(coordenadas)
+
+    # Verificamos si se encontró alguna coordenada válida en el cuarto cuadrante 
+    if resultado[0] == 0 and resultado[1] == 0:
+        print("\nNo hay coordenadas en el cuarto cuadrante.")
+    else:
+        print("\nCoordenada más alejada en el cuarto cuadrante:")
+        print(resultado)
+
+main()
